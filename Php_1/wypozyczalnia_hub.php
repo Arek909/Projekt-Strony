@@ -16,11 +16,16 @@
         <button type="submit">Twoje dane</button></br>
     </form>
     <br>
-    <form action="index.php" method="post">
-        <button type="submit">Wyloguj</button></br>
+    <form action="user_docs.php" method="post">
+        <button type="submit">Twoje dokumenty</button></br>
     </form>
-
+    <br>
+    <form action="" method="post">
+        <input type="submit" name="logout" value="Wyloguj">
+    </form>
 </body>
 </html>
 <?php
+    include "logout_system.php";
+    session_start();
 ?>

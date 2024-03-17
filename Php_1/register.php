@@ -7,6 +7,29 @@
 </head>
 <body>
     <h1>Rejestracja:</h1>
+    <?php
+    // Rozpocznij sesję
+    session_start();
+
+    // Sprawdź, czy istnieje sesja z komunikatem o zajętej nazwie użytkownika
+    if (isset($_SESSION['username_taken']) && isset($_SESSION ['nr_prawajazdy_taken'])) {
+        // Wyświetl komunikat o zajętej nazwie użytkownika i numerze prawa jazdy
+        echo "<p style='color: red;'>Nazwa użytkownika i numer prawajazdy są już zajęte.</p>";
+        // Usuń sesję z komunikatem po wyświetleniu
+        unset($_SESSION['username_taken']);
+        unset($_SESSION['$nr_prawajazdy_taken']);
+    }elseif (isset($_SESSION['username_taken'])){
+         // Wyświetl komunikat o zajętej nazwie użytkownika i numerze prawa jazdy
+         echo "<p style='color: red;'>Nazwa użytkownika jest już zajęta.</p>";
+         // Usuń sesję z komunikatem po wyświetleniu
+         unset($_SESSION['username_taken']);
+    }elseif (isset($_SESSION['nr_prawajazdy_taken'])){
+        // Wyświetl komunikat o zajętej nazwie użytkownika i numerze prawa jazdy
+        echo "<p style='color: red;'>Numer prawa jazdy jest już zajęty.</p>";
+        // Usuń sesję z komunikatem po wyświetleniu
+        unset($_SESSION['$nr_prawajazdy_taken']);
+    }
+    ?>
     <form action="index.php" method="post">
         <button type="submit"><- Cofnij</button>
     </form>

@@ -5,9 +5,28 @@ include "database.php";
 $imie = $_POST["imie"];
 $nazwisko = $_POST["nazwisko"];
 $nr_prawajazdy = $_POST["nr_prawajazdy"];
+$data_urodzenia = $_POST["data_urodzenia"];
 $login = $_POST["login"];
 $haslo = $_POST["haslo"];
 $i = 0;
+
+// Oblicz wiek na podstawie daty urodzenia
+function oblicz_wiek($data_urodzenia) {
+    $dzisiaj = new DateTime();
+    $urodzenie = new DateTime($data_urodzenia);
+    $roznica = $dzisiaj->diff($urodzenie);
+    return $roznica->y; // Zwraca tylko liczbę lat
+}
+
+// Sprawdź, czy osoba ma co najmniej 18 lat
+if (oblicz_wiek($data_urodzenia) < 18) {
+    // jesli login lub mail sie powtarzaja ustaw sesje z komunikatem
+    session_start();
+    $_SESSION['birthdate'] = true;
+    // Przekieruj użytkownika z powrotem do formularza rejestracji
+    header("Location: register.php");
+    exit();
+}
 
 // Funkcja sprawdzająca, czy zmienna składa się z samych cyfr
 if (ctype_digit($nr_prawajazdy)){
@@ -50,13 +69,14 @@ $max_id_user = $row_max_id['max_id'];
 
 $next_id_user = $max_id_user + 1;
 
-$sql = "INSERT INTO logindb (id_user, login, haslo, imie, nazwisko, nr_prawajazdy) 
+$sql = "INSERT INTO logindb (id_user, login, haslo, imie, nazwisko, nr_prawajazdy, data_urodzenia) 
 VALUES ('$next_id_user',
         '$login',
         '$haslo',
         '$imie',
         '$nazwisko',
-        '$nr_prawajazdy')";
+        '$nr_prawajazdy',
+        '$data_urodzenia')";
 
 
 if (mysqli_query($conn, $sql)){

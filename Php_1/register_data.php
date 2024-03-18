@@ -9,6 +9,16 @@ $login = $_POST["login"];
 $haslo = $_POST["haslo"];
 $i = 0;
 
+// Funkcja sprawdzająca, czy zmienna składa się z samych cyfr
+if (ctype_digit($nr_prawajazdy)){
+    
+}else{
+    session_start();
+    $_SESSION['wrong_number_value'] = true;
+    // Przekieruj użytkownika z powrotem do formularza rejestracji
+    header("Location: register.php");
+    exit();
+}
 // sprawdz czy login lub mail nie jest zajety
 $sgl_check_login = "SELECT * FROM logindb WHERE login = '$login'";
 $result_check_login = mysqli_query($conn, $sgl_check_login);

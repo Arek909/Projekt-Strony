@@ -17,7 +17,7 @@
         echo "<p style='color: red;'>Nazwa użytkownika i numer prawajazdy są już zajęte.</p>";
         // Usuń sesję z komunikatem po wyświetleniu
         unset($_SESSION['username_taken']);
-        unset($_SESSION['$nr_prawajazdy_taken']);
+        unset($_SESSION['nr_prawajazdy_taken']);
     }elseif (isset($_SESSION['username_taken'])){
          // Wyświetl komunikat o zajętej nazwie użytkownika i numerze prawa jazdy
          echo "<p style='color: red;'>Nazwa użytkownika jest już zajęta.</p>";
@@ -27,7 +27,12 @@
         // Wyświetl komunikat o zajętej nazwie użytkownika i numerze prawa jazdy
         echo "<p style='color: red;'>Numer prawa jazdy jest już zajęty.</p>";
         // Usuń sesję z komunikatem po wyświetleniu
-        unset($_SESSION['$nr_prawajazdy_taken']);
+        unset($_SESSION['nr_prawajazdy_taken']);
+    }elseif (isset($_SESSION['wrong_number_value'])){
+        // Wyświetl komunikat o zajętej nazwie użytkownika i numerze prawa jazdy
+        echo "<p style='color: red;'>Nieprawidłowy numer prawa jazdy.</p>";
+        // Usuń sesję z komunikatem po wyświetleniu
+        unset($_SESSION['wrong_number_value']);
     }
     ?>
     <form action="index.php" method="post">

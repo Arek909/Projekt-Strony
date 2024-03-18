@@ -33,6 +33,11 @@
         echo "<p style='color: red;'>Nieprawidłowy numer prawa jazdy.</p>";
         // Usuń sesję z komunikatem po wyświetleniu
         unset($_SESSION['wrong_number_value']);
+    }elseif (isset($_SESSION['birthdate'])){
+        // Wyświetl komunikat o zajętej nazwie użytkownika i numerze prawa jazdy
+        echo "<p style='color: red;'>Niestety jesteś niepełnoletni.</p>";
+        // Usuń sesję z komunikatem po wyświetleniu
+        unset($_SESSION['birthdate']);
     }
     ?>
     <form action="index.php" method="post">
@@ -48,6 +53,9 @@
 
         <label>Numer prawa jazdy: </label>
         <input type="text" name="nr_prawajazdy" placeholder="Numer prawa jazdy" required><br>
+        
+        <label>Data urodzenia: </label>
+        <input type="date" name="data_urodzenia" required><br>
         
         <label>Login lub adres e-mail: </label>
         <input type="text" name="login" placeholder="Login lub adres e-mail:" required><br>

@@ -1,5 +1,5 @@
 <?php
-if(isset($_POST['logout'])) {
+if(isset($_POST['logout'])) { // Sprawdzenie, czy został wysłany formularz wylogowania
     // Usuń wszystkie zmienne sesji
     session_unset();
     
@@ -7,7 +7,7 @@ if(isset($_POST['logout'])) {
     session_destroy();
     
     // Przekieruj użytkownika na stronę logowania (lub inną stronę)
-    header("Location: index.php"); // Tutaj wpisz odpowiednią ścieżkę
-    exit();
+    header("Location: index.php"); // Przekierowanie użytkownika na stronę logowania
+    exit(); // Zakończenie wykonywania skryptu
 }
 ?>

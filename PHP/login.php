@@ -1,37 +1,48 @@
 <?php
-// import pliku db_php
-include "db_conn.php";
-    if (isset($_POST["id_user"]) && isset($_POST["haslo"])) {
-        // funkcja wyczyszcza dane wejsciowe ze znakow specjalnych
-        function validate($data) {
-            $data = trim($data);
-            $data = stripslashes($data);
-            $data = htmlspecialchars($data);
-            return $data;
-        }
-        // pobranie danych z formularza przypisanie ich do zmiennej $id_user oraz $haslo
-        $id_user = validate($_POST["id_user"]);
-        $haslo = validate($_POST["haslo"]);
-        // sprawdza czy urzytkownik nie podal pustego pola jesli tak wyswietla komunikat o pustym polu w linku
-        if (empty($id_user) || empty($haslo)) {
-            header("Location: index.php?error=emptyfields");
+session_start();
+include "database.php";
+
+
+
+$login = $_POST["login"];
+$haslo = $_POST["haslo"];
+
+if (empty($login) || empty($haslo)) {
+    echo "<strong>Uzupełnij brakujące dane logowania!</strong>";
+} else {
+    $sql = "SELECT * FROM logindb WHERE login = '$login' AND haslo = '$haslo'";
+    $result = mysqli_query($conn, $sql);
+
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $admin_perm = $row['admin_perm'];
+
+        // Pobranie dodatkowych informacji o użytkowniku z bazy danych
+        $id_user = $row['id_user'];
+        $imie = $row['imie'];
+        $nazwisko = $row['nazwisko'];
+
+        // Zapisanie danych użytkownika do sesji
+        $_SESSION["login"] = $login;
+        $_SESSION["admin_perm"] = $admin_perm;
+        $_SESSION["id_user"] = $id_user;
+        $_SESSION["imie"] = $imie;
+        $_SESSION["nazwisko"] = $nazwisko;
+        $_SESSION["data_urodzenia"] = $data_urodzenia;
+
+        if ($admin_perm == 0) {
+            header("Location: wypozyczalnia_hub.php");
             exit();
         } else {
-            // w przeciwnym razie wysylamy zapytanie do bazy sprawdza czy dane sie zgadzaja z baza danych logowania
-            $sql = "SELECT * FROM logindb WHERE id_user= '$id_user' AND haslo='$haslo'"; 
-            $result = mysqli_query($conn, $sql);
-            // jesli tak wyswietla komunikat
-            if (mysqli_num_rows($result)) {
-                echo "Witamy w wypożyczalni";
-            }
-            // jesli nie wyswietla blad w linku
-            else{
-                header("Location: index.php?error=invalidLoginOrPassword");
+            header("Location: admin_hub.php");
             exit();
-            }
         }
     } else {
-        header("Location: index.php");
+        echo "<strong>Podano błędne hasło</strong>";
+        echo "<form action='index.php' method='post'>";
+        echo "<input type='submit' value='Zaloguj ponownie.'>"; 
+        echo "</form>";
         exit();
     }
+}
 ?>

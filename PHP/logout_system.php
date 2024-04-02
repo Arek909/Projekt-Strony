@@ -6,8 +6,8 @@ if(isset($_POST['logout'])) {
     // Zniszcz sesję
     session_destroy();
     
-    // Przekieruj użytkownika na stronę logowania (lub inną stronę)
-    header("Location: index.php"); // Tutaj wpisz odpowiednią ścieżkę
+
+    header("Location: index.php"); 
     exit();
 }
 ?>

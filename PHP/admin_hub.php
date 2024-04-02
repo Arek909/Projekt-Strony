@@ -23,9 +23,15 @@ if (!isset( $_SESSION["login"]) && $admin_perm == 0) {
         <h2> Akcje: </h2>
         <button type="submit">Dodaj auto</button><br>
     </form>
+    <br>
     <form action="delate_car.php" method="post">   
         <button type="submit">Usuń auto</button><br>
     </form>
+    <br>
+    <form action="zmiana_ceny.php" method="post">
+        <input type='submit' value='Zmień cene'>
+    </form>
+    <br>
     <form action="logout_system.php" method="post">
         <input type='submit' name='logout' value='Wyloguj'>
     </form>

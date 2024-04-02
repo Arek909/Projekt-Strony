@@ -8,14 +8,14 @@
 <body>
     <?php
     include "database.php"; // Podłączenie do bazy danych
-
+    session_start(); // Rozpoczęcie sesji
     if (!isset( $_SESSION["login"])) {
         // Jeśli użytkownik nie jest zalogowany, przekieruj go do strony logowania
         header("Location: index.php");
         exit(); // Upewnij się, że skrypt kończy działanie po przekierowaniu
     }
     
-    session_start(); // Rozpoczęcie sesji
+ 
     $id_user = $_SESSION['id_user']; // Pobranie ID aktualnie zalogowanego użytkownika
 
     echo "<h1>Twoje dokumenty:</h1>";

@@ -88,16 +88,16 @@ if(isset($_SESSION['wybrane_samochody'])) { // Sprawdzenie, czy istnieją wybran
 }
 ?>
 
-<form action="" method="post"> <!-- Formularz przekierowujący do tej samej strony -->
+<form action="" method="post"> 
     <label for="days">Liczba dni wypożyczenia:</label>
     <input type="number" id="days" name="days" min="1" required><br><br>
     <input type="submit" name="update" value="Aktualizuj">
 </form>
 <br>
-<form action="order.php" method="post"> <!-- Formularz przekierowujący do tej samej strony -->
+<form action="order.php" method="post"> 
     <input type="submit" name="update" value="Złóż zamówienie">
 </form>
 
-<form action="cofanie_zamowienia.php" method="post"> <!-- Formularz przekierowujący do tej samej strony -->
+<form action="cofanie_zamowienia.php" method="post"> 
     <input type="submit" name="update" value="<- cofnij">
 </form>

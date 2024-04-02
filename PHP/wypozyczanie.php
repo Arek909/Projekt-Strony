@@ -10,7 +10,7 @@
     // Rozpoczęcie sesji i wczytanie plików z połączeniem do bazy danych oraz systemem wylogowania
     session_start();
     include "database.php";
-    include "logout_system.php";
+
 
     if (!isset( $_SESSION["login"])) {
         // Jeśli użytkownik nie jest zalogowany, przekieruj go do strony logowania

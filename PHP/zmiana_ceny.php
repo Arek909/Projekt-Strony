@@ -1,21 +1,33 @@
-<?php
-session_start();
-include "database.php";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wybierz auto do zmiany ceny:</title>
+</head>
+<body>
+    <?php
+    // Rozpoczęcie sesji i wczytanie plików z połączeniem do bazy danych oraz systemem wylogowania
+    session_start();
+    include "database.php";
 
-if (!isset( $_SESSION["login"]) && $admin_perm == 0) {
-    // Jeśli użytkownik nie jest zalogowany, przekieruj go do strony logowania
-    header("Location: index.php");
-    exit(); // Upewnij się, że skrypt kończy działanie po przekierowaniu
-}
-// Nagłówek informujący użytkownika o celu strony
-    echo "<h1>Usun auto:</h1>";
+
+    if (!isset( $_SESSION["login"])) {
+        // Jeśli użytkownik nie jest zalogowany, przekieruj go do strony logowania
+        header("Location: index.php");
+        exit(); // Upewnij się, że skrypt kończy działanie po przekierowaniu
+    }
+
+    // Nagłówek informujący użytkownika o celu strony
+    echo "<h1>Wybierz auto do zmiany ceny:</h1>";
 
     // Zapytanie SQL pobierające tylko te samochody, które są dostępne (dostepnosc = 1)
     $sql = "SELECT * FROM cardb WHERE dostepnosc = 1";
     $result = $conn->query($sql);
 
     // Formularz umożliwiający użytkownikowi wypożyczenie samochodu
-    echo "<form action='usuwanie_aut.php' method='post'>";
+    echo "<form action='zmiana_ceny_2.php' method='post'>";
+
     // Tabela wyświetlająca dostępne samochody wypożyczalni
     echo "<table border='1'>
     <tr>
@@ -42,7 +54,7 @@ if (!isset( $_SESSION["login"]) && $admin_perm == 0) {
             echo "</tr>";
         }
     } else {
-        echo "<tr><td colspan='7'>Brak wolnych aut do usuniecia</td></tr>"; // Komunikat wyświetlany w przypadku braku dostępnych samochodów w bazie
+        echo "<tr><td colspan='7'>Wszystkie pojazdy są aktualnie wypożyczone</td></tr>"; // Komunikat wyświetlany w przypadku braku dostępnych samochodów w bazie
     }
     
     echo "</table>";
@@ -54,3 +66,6 @@ if (!isset( $_SESSION["login"]) && $admin_perm == 0) {
     echo "<input type='submit' value='<-- cofnij.'>"; 
     echo "</form>";
     ?>
+
+</body>
+</html>

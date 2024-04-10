@@ -21,8 +21,25 @@
     // Nagłówek informujący użytkownika o celu strony
     echo "<h1>Wypożycz samochód:</h1>";
 
-    // Zapytanie SQL pobierające tylko te samochody, które są dostępne (dostepnosc = 1)
-    $sql = "SELECT * FROM cardb WHERE dostepnosc = 1";
+    ?>
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+    <label for="sortowanie">Sortuj według:</label>
+    <select name="sortowanie" id="sortowanie">
+        <option value="marka">Marka</option>
+        <option value="model">Model</option>
+        <option value="rocznik">Rocznik</option>
+        <option value="cena">Cena za dzień</option>
+    </select>
+    <button type="submit">Sortuj</button>
+    </form>
+    <?php
+    if(isset($_POST['sortowanie'])) {
+        $sortowanie = $_POST['sortowanie']; // Pobranie wybranego kryterium sortowania
+        $sql = "SELECT * FROM cardb WHERE dostepnosc = 1 ORDER BY $sortowanie"; // Zapytanie SQL z uwzględnieniem sortowania
+    } else {
+        // Domyślne zapytanie SQL, jeśli nie ma żądania sortowania
+        $sql = "SELECT * FROM cardb WHERE dostepnosc = 1";
+    }
     $result = $conn->query($sql);
 
     // Formularz umożliwiający użytkownikowi wypożyczenie samochodu

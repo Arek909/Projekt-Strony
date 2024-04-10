@@ -11,11 +11,6 @@
     // Rozpocznij sesję
     session_start();
 
-    if (!isset( $_SESSION["login"])) {
-        // Jeśli użytkownik nie jest zalogowany, przekieruj go do strony logowania
-        header("Location: index.php");
-        exit(); // Upewnij się, że skrypt kończy działanie po przekierowaniu
-    }
 
     // Sprawdź, czy istnieje sesja z komunikatem o zajętej nazwie użytkownika
     if (isset($_SESSION['username_taken']) && isset($_SESSION ['nr_prawajazdy_taken'])) {
@@ -34,6 +29,12 @@
         echo "<p style='color: red;'>Numer prawa jazdy jest już zajęty.</p>";
         // Usuń sesję z komunikatem po wyświetleniu
         unset($_SESSION['$nr_prawajazdy_taken']);
+    }
+    if(isset($_SESSION['za_mlody'])){
+    // Wyświetl komunikat o zajętej nazwie użytkownika i numerze prawa jazdy
+    echo "<p style='color: red;'>Użytkownik niepełnoletni</p>";
+    // Usuń sesję z komunikatem po wyświetleniu
+    unset($_SESSION['$za_mlody']);
     }
     ?>
     <form action="index.php" method="post">

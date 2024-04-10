@@ -2,19 +2,30 @@
 
 include "database.php";
 
-if (!isset( $_SESSION["login"])) {
-    // Jeśli użytkownik nie jest zalogowany, przekieruj go do strony logowania
-    header("Location: index.php");
-    exit(); // Upewnij się, że skrypt kończy działanie po przekierowaniu
-}
-
 $imie = $_POST["imie"];
 $nazwisko = $_POST["nazwisko"];
+$data_urodzenia = $_POST["data_urodzenia"];
 $nr_prawajazdy = $_POST["nr_prawajazdy"];
 $login = $_POST["login"];
 $haslo = $_POST["haslo"];
 $i = 0;
 
+// Funkcja obliczająca wiek na podstawie daty urodzenia
+function oblicz_wiek($data_urodzenia) {
+    $dzisiaj = new DateTime(); // Pobranie dzisiejszej daty
+    $urodzenie = new DateTime($data_urodzenia); // Konwersja daty urodzenia na obiekt DateTime
+    $roznica = $dzisiaj->diff($urodzenie); // Obliczenie różnicy między datami
+    return $roznica->y; // Zwrócenie liczby lat
+}
+// Sprawdzenie, czy użytkownik ma co najmniej 18 lat
+if (oblicz_wiek($data_urodzenia) < 18) {
+    // Ustawienie sesji informującej o zbyt młodym wieku użytkownika
+    session_start();
+    $_SESSION['za_mlody'] = true;
+    // Przekierowanie użytkownika z powrotem do formularza rejestracji
+    header("Location: register.php");
+    exit();
+}
 // sprawdz czy login lub mail nie jest zajety
 $sgl_check_login = "SELECT * FROM logindb WHERE login = '$login'";
 $result_check_login = mysqli_query($conn, $sgl_check_login);
@@ -37,6 +48,7 @@ if (mysqli_num_rows($result_check_nr_prawajazdy) > 0) {
     header("Location: register.php");
     exit();
 }
+
 
 // Znalezienie maksymalnego numeru id_user w tabeli
 $sql_max_id = "SELECT MAX(id_user) AS max_id FROM logindb";

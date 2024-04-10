@@ -18,8 +18,14 @@
         header("Location: index.php");
         exit(); // Upewnij się, że skrypt kończy działanie po przekierowaniu
     }
-    // Zapytanie SQL pobierające tylko te samochody, które są dostępne (dostepnosc = 1)
-    $sql = "SELECT * FROM cardb WHERE dostepnosc = 1";
+    // Sprawdzenie, czy użytkownik wysłał żądanie sortowania
+    if(isset($_POST['sortowanie'])) {
+        $sortowanie = $_POST['sortowanie']; // Pobranie wybranego kryterium sortowania
+        $sql = "SELECT * FROM cardb WHERE dostepnosc = 1 ORDER BY $sortowanie"; // Zapytanie SQL z uwzględnieniem sortowania
+    } else {
+        // Domyślne zapytanie SQL, jeśli nie ma żądania sortowania
+        $sql = "SELECT * FROM cardb WHERE dostepnosc = 1";
+    }
     $result = $conn->query($sql);
 
     // Tabela wyświetlająca dostępne samochody wypożyczalni
@@ -46,7 +52,7 @@
             echo "</tr>";
         }
     } else {
-        echo "<tr><td colspan='7'>Brak wolnych aut do usuniecia</td></tr>"; // Komunikat wyświetlany w przypadku braku dostępnych samochodów w bazie
+        echo "<tr><td colspan='7'>Brak wolnych aut</td></tr>"; // Komunikat wyświetlany w przypadku braku dostępnych samochodów w bazie
     }
     ?>
     <form action="admin_hub.php" method="post">
@@ -77,7 +83,18 @@
         <input type="number" name="cena" placeholder="Cena" required><br>
 
         
-     <button type="submit">Dodaj</button>
+     <button type="submit">Dodaj</button><br>
+    </form>
+    
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+    <label for="sortowanie">Sortuj według:</label>
+    <select name="sortowanie" id="sortowanie">
+        <option value="marka">Marka</option>
+        <option value="model">Model</option>
+        <option value="rocznik">Rocznik</option>
+        <option value="cena">Cena za dzień</option>
+    </select>
+    <button type="submit">Sortuj</button>
     </form>
 </body>
 </html>

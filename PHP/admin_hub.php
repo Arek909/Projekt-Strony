@@ -32,6 +32,10 @@ if (!isset( $_SESSION["login"]) && $admin_perm == 0) {
         <input type='submit' value='Zmień cene'>
     </form>
     <br>
+    <form action="umowy.php" method="post">
+        <input type='submit' value='Zawarte_umowy'>
+    </form>
+    <br>
     <form action="logout_system.php" method="post">
         <input type='submit' name='logout' value='Wyloguj'>
     </form>

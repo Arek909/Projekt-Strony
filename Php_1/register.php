@@ -4,67 +4,105 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rejestracja</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .back-button {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-button button {
+            background-color: #e74c3c;
+        }
+
+        .back-button button:hover {
+            background-color: #c0392b;
+        }
+    </style>
 </head>
 <body>
-    <h1>Rejestracja:</h1>
-    <?php
-    // Rozpoczęcie sesji
-    session_start();
-
-    // Sprawdzenie, czy istnieje sesja z komunikatem o zajętej nazwie użytkownika lub numerze prawa jazdy
-    if (isset($_SESSION['username_taken']) && isset($_SESSION ['nr_prawajazdy_taken'])) {
-        // Wyświetlenie komunikatu o zajętej nazwie użytkownika i numerze prawa jazdy
-        echo "<p style='color: red;'>Nazwa użytkownika i numer prawajazdy są już zajęte.</p>";
-        // Usunięcie sesji z komunikatem po wyświetleniu
-        unset($_SESSION['username_taken']);
-        unset($_SESSION['nr_prawajazdy_taken']);
-    } elseif (isset($_SESSION['username_taken'])) {
-        // Wyświetlenie komunikatu o zajętej nazwie użytkownika
-        echo "<p style='color: red;'>Nazwa użytkownika jest już zajęta.</p>";
-        // Usunięcie sesji z komunikatem po wyświetleniu
-        unset($_SESSION['username_taken']);
-    } elseif (isset($_SESSION['nr_prawajazdy_taken'])) {
-        // Wyświetlenie komunikatu o zajętym numerze prawa jazdy
-        echo "<p style='color: red;'>Numer prawa jazdy jest już zajęty.</p>";
-        // Usunięcie sesji z komunikatem po wyświetleniu
-        unset($_SESSION['nr_prawajazdy_taken']);
-    } elseif (isset($_SESSION['wrong_number_value'])) {
-        // Wyświetlenie komunikatu o nieprawidłowym numerze prawa jazdy
-        echo "<p style='color: red;'>Nieprawidłowy numer prawa jazdy.</p>";
-        // Usunięcie sesji z komunikatem po wyświetleniu
-        unset($_SESSION['wrong_number_value']);
-    } elseif (isset($_SESSION['birthdate'])) {
-        // Wyświetlenie komunikatu o zbyt młodym wieku użytkownika
-        echo "<p style='color: red;'>Niestety jesteś niepełnoletni.</p>";
-        // Usunięcie sesji z komunikatem po wyświetleniu
-        unset($_SESSION['birthdate']);
-    }
-    ?>
-    <!-- Formularz rejestracji -->
-    <form action="index.php" method="post">
-        <button type="submit"><- Cofnij</button>
-    </form>
-    <br>
+    <h1>Rejestracja</h1>
     <form action="register_data.php" method="post">
-        <label>Imię: </label>
-        <input type="text" name="imie" placeholder="Imię" required><br>
+        <label for="imie">Imię:</label>
+        <input type="text" name="imie" id="imie" placeholder="Imię" required>
 
-        <label>Nazwisko: </label>
-        <input type="text" name="nazwisko" placeholder="Nazwisko" required><br>
+        <label for="nazwisko">Nazwisko:</label>
+        <input type="text" name="nazwisko" id="nazwisko" placeholder="Nazwisko" required>
 
-        <label>Numer prawa jazdy: </label>
-        <input type="text" name="nr_prawajazdy" placeholder="Numer prawa jazdy" required><br>
-        
-        <label>Data urodzenia: </label>
-        <input type="date" name="data_urodzenia" required><br>
-        
-        <label>Login lub adres e-mail: </label>
-        <input type="text" name="login" placeholder="Login lub adres e-mail:" required><br>
+        <label for="data_urodzenia">Data urodzenia (YYYY-MM-DD):</label>
+        <input type="text" name="data_urodzenia" id="data_urodzenia" placeholder="Data urodzenia (YYYY-MM-DD)" pattern="\d{4}-\d{2}-\d{2}" required>
 
-        <label>Hasło: </label>
-        <input type="password" name="haslo" placeholder="Hasło" required><br>
+        <label for="nr_prawajazdy">Numer prawa jazdy:</label>
+        <input type="text" name="nr_prawajazdy" id="nr_prawajazdy" placeholder="Numer prawa jazdy" required>
+
+        <label for="login">Login lub adres e-mail:</label>
+        <input type="text" name="login" id="login" placeholder="Login lub adres e-mail:" required>
+
+        <label for="haslo">Hasło:</label>
+        <input type="password" name="haslo" id="haslo" placeholder="Hasło" required>
 
         <button type="submit">Zarejestruj</button>
     </form>
+
+    <div class="back-button">
+        <button onclick="window.location.href='index.php';">← Cofnij</button>
+    </div>
 </body>
 </html>
+

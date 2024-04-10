@@ -1,23 +1,48 @@
 <?php
-session_start(); // Rozpoczęcie sesji
-include "database.php"; // Wczytanie pliku z połączeniem do bazy danych
+session_start();
+include "database.php";
 
-$login = $_POST["login"]; // Pobranie wartości pola "login" z formularza logowania
-$haslo = $_POST["haslo"]; // Pobranie wartości pola "haslo" z formularza logowania
 
-if(empty($login) || empty($haslo)){ // Sprawdzenie, czy pola login i hasło nie są puste
-    echo "<strong>Uzupełnij brakujące dane logowania!</strong>"; // Wyświetlenie komunikatu o braku uzupełnionych danych
+
+$login = $_POST["login"];
+$haslo = $_POST["haslo"];
+
+if (empty($login) || empty($haslo)) {
+    echo "<strong>Uzupełnij brakujące dane logowania!</strong>";
 } else {
-    $sql = "SELECT * FROM logindb WHERE login = '$login' AND haslo = '$haslo'"; // Zapytanie SQL w celu sprawdzenia poprawności danych logowania
-    $result = mysqli_query($conn, $sql); // Wykonanie zapytania na bazie danych
+    $sql = "SELECT * FROM logindb WHERE login = '$login' AND haslo = '$haslo'";
+    $result = mysqli_query($conn, $sql);
 
-    if (mysqli_num_rows($result) > 0) { // Sprawdzenie, czy wynik zapytania zawiera co najmniej jeden wiersz
-        $_SESSION["login"] = $login; // Ustawienie zmiennej sesyjnej "login" na wartość podanego loginu
-        header("Location: wypozyczalnia_hub.php"); // Przekierowanie użytkownika do strony wypożyczalni po poprawnym zalogowaniu
-        exit(); // Zakończenie wykonywania skryptu
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $admin_perm = $row['admin_perm'];
+
+        // Pobranie dodatkowych informacji o użytkowniku z bazy danych
+        $id_user = $row['id_user'];
+        $imie = $row['imie'];
+        $nazwisko = $row['nazwisko'];
+
+        // Zapisanie danych użytkownika do sesji
+        $_SESSION["login"] = $login;
+        $_SESSION["admin_perm"] = $admin_perm;
+        $_SESSION["id_user"] = $id_user;
+        $_SESSION["imie"] = $imie;
+        $_SESSION["nazwisko"] = $nazwisko;
+        $_SESSION["data_urodzenia"] = $data_urodzenia;
+
+        if ($admin_perm == 0) {
+            header("Location: wypozyczalnia_hub.php");
+            exit();
+        } else {
+            header("Location: admin_hub.php");
+            exit();
+        }
     } else {
-        echo "<strong>Podano błędne hasło</strong>"; // Wyświetlenie komunikatu o podaniu błędnego hasła
-        exit(); // Zakończenie wykonywania skryptu
+        echo "<strong>Podano błędne hasło</strong>";
+        echo "<form action='index.php' method='post'>";
+        echo "<input type='submit' value='Zaloguj ponownie.'>"; 
+        echo "</form>";
+        exit();
     }
 }
 ?>

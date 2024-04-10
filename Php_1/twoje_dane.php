@@ -4,25 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Twoje dane</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        p {
+            margin-left: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
+
 <?php
-// Rozpoczęcie sesji i wczytanie pliku z połączeniem do bazy danych
 session_start();
 include "database.php";
 
-// Pobranie loginu użytkownika z sesji
-$login = $_SESSION['login'];
+if (!isset( $_SESSION["login"])) {
+    // Jeśli użytkownik nie jest zalogowany, przekieruj go do strony logowania
+    header("Location: index.php");
+    exit(); // Upewnij się, że skrypt kończy działanie po przekierowaniu
+}
 
-// Zapytanie SQL pobierające dane użytkownika na podstawie loginu
+$login = $_SESSION['login'];
 $sql = "SELECT * FROM logindb WHERE login = '$login'";
+
 $result = mysqli_query($conn, $sql);
 
-// Sprawdzenie, czy wynik zapytania zawiera jakieś dane
 if (mysqli_num_rows($result) > 0) {
-    $row = mysqli_fetch_assoc($result); // Pobranie danych użytkownika
+    $row = mysqli_fetch_assoc($result);
 
-    // Wyświetlenie danych użytkownika na stronie
     echo "<h1>Twoje dane:</h1>";
     echo "<p><strong>Użytkownik:</strong> " . $row['login'] . "</p>";
     echo "<p><strong>Imię:</strong> " . $row['imie'] . "</p>";
@@ -30,15 +67,16 @@ if (mysqli_num_rows($result) > 0) {
     echo "<p><strong>Data urodzenia:</strong> " . $row['data_urodzenia'] . "</p>";
     echo "<p><strong>Numer prawa jazdy:</strong> " . $row['nr_prawajazdy'] . "</p>";
 } else {
-    // Wyświetlenie komunikatu o braku danych użytkownika
-    echo "Brak danych użytkownika.";
+    echo "<p style='text-align: center;'>Brak danych użytkownika.</p>";
 }
 ?>
-    <!-- Formularz przekierowujący użytkownika do panelu głównego -->
+    <!-- Formularz przekierowujący do poprzedniej strony -->
     <form action="wypozyczalnia_hub.php" method="post">
         <h2>Wróć</h2>
-        <button type="submit"><---</button></br>
+        <button type="submit"><---</button><br>
     </form>
+
 </body>
 </html>
+
 

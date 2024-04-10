@@ -4,15 +4,123 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Twoje dokumenty</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
+    <h1>Twoje dokumenty:</h1>
+
     <?php
-    echo "<h1>Twoje dokumenty:</h1>"; // Wyświetlenie nagłówka "Twoje dokumenty"
+    include "database.php"; // Podłączenie do bazy danych
+    session_start(); // Rozpoczęcie sesji
+    if (!isset( $_SESSION["login"])) {
+        // Jeśli użytkownik nie jest zalogowany, przekieruj go do strony logowania
+        header("Location: index.php");
+        exit(); // Upewnij się, że skrypt kończy działanie po przekierowaniu
+    }
+    
+    $id_user = $_SESSION['id_user']; // Pobranie ID aktualnie zalogowanego użytkownika
+
+    // Zapytanie SQL w celu pobrania danych z tabeli docsdb oraz cardb dla aktualnie zalogowanego użytkownika
+    $sql = "SELECT d.id_umowy, d.id_car, d.imie, d.nazwisko, d.data_wypozyczenia, d.data_oddania, d.cena_total, c.marka, c.model, c.typ_nadwozia, c.rocznik
+            FROM docsdb d
+            INNER JOIN cardb c ON d.id_car = c.id_car
+            WHERE d.id_user = $id_user";
+    $result = $conn->query($sql); // Wykonanie zapytania
+
+    if ($result->num_rows > 0) { // Sprawdzenie, czy wynik zapytania zawiera co najmniej jeden wiersz
+        echo "<table>"; // Rozpoczęcie tabeli HTML
+        echo "<tr>";
+        echo "<th>Numer umowy</th>";
+        echo "<th>Marka</th>";
+        echo "<th>Model</th>";
+        echo "<th>Typ nadwozia</th>";
+        echo "<th>Rocznik</th>";
+        echo "<th>Numer katalogowy pojazdu</th>";
+        echo "<th>Imię</th>";
+        echo "<th>Nazwisko</th>";
+        echo "<th>Data wypożyczenia</th>";
+        echo "<th>Data oddania</th>";
+        echo "<th>Cena całkowita</th>";
+        echo "</tr>";
+
+        // Iteracja przez wyniki zapytania i wyświetlanie danych w tabeli
+        while($row = $result->fetch_assoc()) {
+            echo "<tr>";
+            echo "<td>" . $row['id_umowy'] . "</td>";
+            echo "<td>" . $row['marka'] . "</td>";
+            echo "<td>" . $row['model'] . "</td>";
+            echo "<td>" . $row['typ_nadwozia'] . "</td>";
+            echo "<td>" . $row['rocznik'] . "</td>";
+            echo "<td>" . $row['id_car'] . "</td>";
+            echo "<td>" . $row['imie'] . "</td>";
+            echo "<td>" . $row['nazwisko'] . "</td>";
+            echo "<td>" . $row['data_wypozyczenia'] . "</td>";
+            echo "<td>" . $row['data_oddania'] . "</td>";
+            echo "<td>" . $row['cena_total'] . "</td>";
+            echo "</tr>";
+        }
+        echo "</table>"; // Zamknięcie tabeli HTML
+    } else {
+        echo "<p style='text-align: center;'>Brak danych do wyświetlenia.</p>"; // Komunikat o braku danych
+    }
     ?>
-    <!-- Formularz przekierowujący użytkownika do panelu głównego -->
+
+    <!-- Formularz przekierowujący do poprzedniej strony -->
     <form action="wypozyczalnia_hub.php" method="post">
-        <h2>Wróć</h2> <!-- Nagłówek "Wróć" -->
-        <button type="submit"><---</button></br> <!-- Przycisk "Wróć" -->
+        <h2>Wróć</h2>
+        <button type="submit"><---</button><br>
     </form>
 </body>
 </html>
+
